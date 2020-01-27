@@ -1,0 +1,53 @@
+#!/usr/bin/python
+from jinja2 import Template
+import sys
+import json
+
+def main():
+	try:
+		template_file = open(sys.argv[1])
+		template_data = template_file.read()
+		template_file.close()
+	except:
+		print("Unable to read template file.")
+		sys.exit(1)
+
+	data = {}
+	input = ""
+	if len(sys.argv) < 3:
+		# Check if there's data on stdin
+		if sys.stdin.isatty():
+			print("No input data on stdin")
+			sys.exit(1)
+		for line in sys.stdin:
+			input = input + line
+	else:
+		# Read 2nd cmdline parameter
+		input = sys.argv[2]
+
+	try:
+		# Load & validate JSON data
+		data = json.loads(input)
+	except:
+		print("JSON input not valid")
+		sys.exit(1)
+
+	template = Template(template_data)
+
+	# Render template to stdout
+	output = template.render(templar=data)
+	print(output)
+
+
+def help():
+	print("Templar renders Jinja2 compatible templates from JSON data read from file/stdin.")
+	print("Usage:")
+	print("	templar <template> <json input>")
+	print("	stdout | templar <template>")
+	sys.exit(1)
+
+if __name__ == "__main__":
+	if len(sys.argv) <= 1:
+		help()
+	else:
+		main()
