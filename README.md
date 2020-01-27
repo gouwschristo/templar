@@ -9,9 +9,11 @@ Usage:
 
 
 Example:
+
 `templar template_file '"firstname": "Foo", "lastname": "Bar"'`
 
 template_file
+
 ```
 First Name: {{ templar.firstname }}
 Last Name: {{ templar.lastname }}
